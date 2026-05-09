@@ -47,7 +47,6 @@ module "storage" {
   static_bucket_name = var.static_bucket_name
   state_bucket_name  = var.state_bucket_name
   logs_bucket_name   = var.logs_bucket_name
-  s3_endpoint_id     = module.vpc.s3_endpoint_id
 }
 
 # call the cloudfront module
