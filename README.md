@@ -269,4 +269,4 @@ The proposed architecture replaces long-term CloudWatch log storage with a Kines
 
 **Aymen** — Aspire Junior Cloud Engineer
 Preparing for AWS Solutions Architect Associate (SAA-C03)
-Based in Italy | [LinkedIn](www.linkedin.com/in/aymen-elkharchi-640a30312)
+Based in Italy | [LinkedIn] (https://www.linkedin.com/in/aymen-elkharchi-640a30312)
