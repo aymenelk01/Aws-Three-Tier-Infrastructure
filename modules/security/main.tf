@@ -8,7 +8,7 @@ resource "aws_security_group" "alb_sg" {
         from_port = 80
         to_port = 80
         protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
+        prefix_list_ids = ["pl-1bbc5972"] # allow traffic from the AWS-managed prefix list for CloudFront
     }   
     # allow inbound traffic on port 443
     ingress {

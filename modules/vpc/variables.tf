@@ -42,3 +42,9 @@ variable "private_db_subnet_cidrs" {
     type = list(string)
     default = ["10.0.20.0/24", "10.0.21.0/24"]
 }
+
+# variable for the AWS region
+variable "aws_region" {
+    description = "The AWS region"
+    type = string
+}

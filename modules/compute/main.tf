@@ -3,10 +3,16 @@
 # create an alb in the public subnets
 resource "aws_lb" "alb" {
   name               = "ALB-${var.environment}"
-  internal           = false
+  internal           = false # set to false to create an internet-facing ALB that can receive traffic from the internet
   load_balancer_type = "application"
   security_groups    = [var.alb_sg_id]
   subnets            = var.public_subnet_ids
+
+  access_logs {
+    bucket  = var.logs_bucket_name
+    prefix  = "alb-logs"
+    enabled = true
+  }
 
   tags = {
     Name = "ALB-${var.environment}"
@@ -19,17 +25,17 @@ resource "aws_lb_target_group" "target" {
   name        = "TargetGroup-${var.environment}"
   port        = 80
   protocol    = "HTTP"
-  vpc_id      = var.vpc_id
+  vpc_id      = var.vpc_id # specify the VPC for the target group to ensure that the ALB can route traffic to the EC2 instances in the private subnets 
   target_type = "instance"
 
   health_check {
     enabled             = true
-    path                = "/"
-    interval            = 30
-    timeout             = 5
-    healthy_threshold   = 3
-    unhealthy_threshold = 2
-    matcher             = "200"
+    path                = "/" # specify the path for the health check (e.g., the root path of the application)
+    interval            = 30 # check every 30 seconds
+    timeout             = 5 # consider the target unhealthy if it does not respond within 5 seconds
+    healthy_threshold   = 3 # consider the target healthy after 3 consecutive successful health checks
+    unhealthy_threshold = 2 # consider the target unhealthy after 2 consecutive failed health checks
+    matcher             = "200" # consider the target healthy if it returns a 200 status code
 
   }
 }
@@ -69,13 +75,19 @@ resource "aws_launch_template" "ec2_launch_template" {
   image_id               = data.aws_ami.amazon_linux.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [var.ec2_sg_id]
-  user_data              = base64encode(file("${path.module}/user_data.sh"))
-
+  user_data = base64encode(templatefile("${path.module}/user_data.sh", {
+    environment        = var.environment
+    static_bucket_name = var.static_bucket_name
+  }))
   tags = {
     Name = "EC2LaunchTemplate-${var.environment}"
   }
+# ensure that the launch template is created before the auto scaling group to avoid issues with the auto scaling group referencing a launch template that does not exist yet
+  lifecycle {
+    create_before_destroy = true
+  }
 
-  iam_instance_profile { name = aws_iam_instance_profile.ec2_ssm_profile.name }
+  iam_instance_profile { name = aws_iam_instance_profile.ec2_profile.name }
 
 }
 
@@ -90,7 +102,7 @@ resource "aws_autoscaling_group" "ec2_asg" {
     version = "$Latest"
   }
   vpc_zone_identifier = var.private_app_subnet_ids # specify the private subnets for the EC2 instances
-  target_group_arns   = [aws_lb_target_group.target.arn]
+  target_group_arns   = [aws_lb_target_group.target.arn] # specify the target group for the EC2 instances to ensure that the ALB can route traffic to the EC2 instances in the private subnets
 
   tag {
     key                 = "Name"

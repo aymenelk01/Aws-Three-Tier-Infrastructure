@@ -48,3 +48,10 @@ variable "rds_sg_id" {
     description = "The ID of the security group for the RDS instance"
     type = string
 }
+
+variable "rds_identifier" {
+    description = "The identifier for the RDS instance"
+    type = string
+    default = "db-instance"
+  
+}

@@ -1,6 +1,28 @@
+variable "environment" {
+  description = "The environment for which to create the resources (e.g., dev, staging, prod)"
+  type        = string
+}
+
 # variable of the bucket name
-variable "bucket_name" {
+variable "static_bucket_name" {
   description = "The name of the S3 bucket to create for static files"
   type        = string
-  
+}
+
+# variable for the bucket name for state files
+variable "state_bucket_name" {
+  description = "The name of the S3 bucket to create for state files"
+  type        = string
+}
+
+# variable for the log bucket name
+variable "logs_bucket_name" {
+  description = "The name of the S3 bucket to create for log files"
+  type        = string
+}
+
+# variable of the s3 endpoint id for the VPC Endpoint
+variable "s3_endpoint_id" {
+  description = "The ID of the S3 VPC Endpoint to restrict access to the log bucket"
+  type        = string
 }
