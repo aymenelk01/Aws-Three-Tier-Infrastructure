@@ -72,12 +72,6 @@ Prevents concurrent Terraform operations from corrupting the state file. Referen
 
 ## Known Issues
 
-### `s3_endpoint_id` Variable is Unused
-
-The `s3_endpoint_id` variable is declared but not used in any resource. It was originally intended for a VPC endpoint condition in the logs bucket policy — that condition was removed because it blocked both Terraform operations and the ELB service account from writing logs.
-
-The variable can be safely removed in a future cleanup pass.
-
 ### ELB Account ID is Region-Specific
 
 The ELB service account ID `635631232127` is specific to `eu-south-1`. If this infrastructure is deployed in a different region, the ELB account ID in `s3policies.tf` must be updated. AWS publishes the full list of ELB account IDs per region in their documentation.

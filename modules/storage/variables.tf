@@ -20,9 +20,3 @@ variable "logs_bucket_name" {
   description = "The name of the S3 bucket to create for log files"
   type        = string
 }
-
-# variable of the s3 endpoint id for the VPC Endpoint
-variable "s3_endpoint_id" {
-  description = "The ID of the S3 VPC Endpoint to restrict access to the log bucket"
-  type        = string
-}

@@ -6,7 +6,7 @@ A production-grade three-tier AWS infrastructure built with Terraform, deployed 
 
 ## Architecture
 
-![Architecture Diagram](docs/architecture.png)
+![Architecture Diagram](architecture.png)
 
 ### Traffic Flow
 
@@ -247,9 +247,7 @@ The proposed architecture replaces long-term CloudWatch log storage with a Kines
 | Issue                                                   | Status             | Details                                                        |
 | ------------------------------------------------------- | ------------------ | -------------------------------------------------------------- |
 | RDS auto-creates CloudWatch log groups                  | Workaround applied | See database module README                                     |
-| `depends_on` commented out in `rds.tf`                  | TODO               | Uncomment to prevent log group conflict on fresh deploy        |
 | Port 443 on ALB and EC2 SG is dead code                 | Intentional        | No HTTPS listener yet — reserved for future SSL implementation |
-| `s3_endpoint_id` variable unused in storage module      | TODO               | Remove in cleanup pass                                         |
 | AL2023 AMI in eu-south-1 has no pre-installed SSM Agent | Fixed              | Installed explicitly in `user_data.sh`                         |
 
 ---
