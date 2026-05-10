@@ -262,6 +262,9 @@ The proposed architecture replaces long-term CloudWatch log storage with a Kines
 - CloudWatch alarms with SNS email notifications
 - DynamoDB point-in-time recovery for production
 - Store `db_password` in AWS Secrets Manager instead of tfvars
+- **Cost Governance Module** — Terraform module integrating AWS Budgets, 
+  Cost Explorer, and SNS alerts to monitor and report actual AWS spend 
+  against defined thresholds.
 
 ---
 
